@@ -1,183 +1,150 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>HBD love</title>	    
-    <link type="text/css" rel="stylesheet" href="./file/default.css">
-    <script type="text/javascript" src="./file/jquery.min.js"></script>
-    <script type="text/javascript" src="./file/jscex.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-parser.js"></script>
-    <script type="text/javascript" src="./file/jscex-jit.js"></script>
-    <script type="text/javascript" src="./file/jscex-builderbase.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-async.min.js"></script>
-    <script type="text/javascript" src="./file/jscex-async-powerpack.min.js"></script>
-    <script type="text/javascript" src="./file/functions.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
-    <script>
-        function playAudio() {
-            var audio = document.getElementById("myAudio");
-            audio.play();
-        }
-    </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday Tanu ✨</title>
+
+  <style>
+    :root{
+      --bg1: #07102a;
+      --bg2: #0b1630;
+      --card: rgba(255,255,255,0.04);
+      --accent: #ff7bb0;
+      --text: #ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text);background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-font-smoothing:antialiased;}
+    #wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;}
+    .card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:18px;padding:26px;box-shadow:0 20px 50px rgba(0,0,0,0.6);position:relative;overflow:hidden;}
+    .leftDecor, .rightDecor{position:absolute;inset:0;pointer-events:none}
+    .title{font-size:clamp(20px,3vw,34px);font-weight:700;margin:6px 0;color:var(--accent);text-align:left}
+    .subtitle{font-size:clamp(14px,2vw,18px);color:#ffd6ea;margin-bottom:14px}
+    .msg{font-size:clamp(14px,1.6vw,18px);line-height:1.6;color:#f6f9ff;text-align:left}
+    .msg .line{display:block;margin:8px 0}
+    .controls{display:flex;gap:10px;align-items:center;margin-top:18px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.12);padding:8px 12px;border-radius:10px;color:var(--text);cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .small{font-size:13px;color:#dfe9ff}
+    .centerRight{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    @media (max-width:700px){
+      .card{padding:18px;border-radius:12px}
+      .title{text-align:center}
+      .subtitle{text-align:center}
+      .msg{text-align:center}
+      .centerRight{align-items:center}
+    }
+
+    /* confetti canvas full area (top layer) */
+    #confetti-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+  </style>
 </head>
 <body>
-    <div id="main">
-        <div id="error"><a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a> (<a href="http://firefox.com.cn/download/">Firefox</a>)</div>
-        <audio autoplay="autoplay" height="100" width="100" id="myAudio">
-            <source src="aud.mp3" type="audio/mp3" />
-            <embed height="100" width="100" src="aud.mp3" />
-        </audio>
-        <div id="wrap">
-            <div id="text">
-                
-<div id="code">
-    <span class="say">happy birthday miss Tanu ✨</span><br>
-    <span class="say">Thank you for meri muskan ke chehre pe muskan laane ke liye 🫀☺️</span><br>
-    <span class="say">Thank you for always feeling special muskan 💕</span><br>
-    <span class="say">I don't know your full name,</span><br>
-    <span class="say">I don't know your nature,</span><br>
-    <span class="say">I haven't even seen you yet.</span><br>
-    <span class="say">but thank you for the word 'jijuuuuu' — it touches my soul 🤌🌹</span><br>
-</div>
+  <div id="wrap">
+    <div class="card" role="main">
+      <canvas id="confetti-canvas"></canvas>
 
-            </div>
-            <div id="clock-box" style="display:none;"></div>
-            <canvas id="canvas" width="1100" height="680"></canvas>
+      <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:260px;">
+          <div class="title">happy birthday miss Tanu ✨</div>
+          <div class="subtitle">From — your (thoda shy) Jiju 💖</div>
+
+          <div class="msg" id="messageBlock">
+            <span class="line">Thank you for meri muskan ke chehre pe muskan laane ke liye 🫀☺️</span>
+            <span class="line">Thank you for always feeling special muskan 💕</span>
+
+            <span class="line">&nbsp;</span>
+
+            <span class="line">I don't know your full name,</span>
+            <span class="line">I don't know your nature,</span>
+            <span class="line">I haven't even seen you yet.</span>
+            <span class="line">but thank you for the word <strong>'jijuuuuu'</strong> — it touches my soul 🤌🌹</span>
+          </div>
+
+          <div class="controls">
+            <button class="btn" id="playBtn">Play music</button>
+            <button class="btn" id="confettiBtn">Celebrate 🎉</button>
+            <div class="small">Tip: if music doesn't autoplay, press "Play music".</div>
+          </div>
         </div>
+
+        <div style="width:220px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <img src="img.png" alt="Tanu" style="width:180px;height:auto;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6)" />
+          <img src="img2.png" alt="" style="width:180px;height:auto;border-radius:8px;opacity:0.95" />
+        </div>
+      </div>
+
+      <div style="margin-top:16px;color:#cfe8ff;font-size:13px">Made with care ❤️ — From your friend</div>
     </div>
+  </div>
 
-    <script>
-    (function() {
-        var canvas = $('#canvas');
-		
-        if (!canvas[0].getContext) {
-            $("#error").show();
-            return false;
+  <!-- Audio (relative path; uses aud.mp3 from repo) -->
+  <audio id="bgAudio" src="aud.mp3" preload="auto"></audio>
+
+  <script>
+    // Play audio (user must interact for autoplay on many browsers)
+    const audio = document.getElementById('bgAudio');
+    const playBtn = document.getElementById('playBtn');
+    playBtn.addEventListener('click', ()=> {
+      audio.play().catch(()=>{});
+      playBtn.textContent = "Playing 🎵";
+    });
+
+    // Simple confetti effect (lightweight)
+    (function(){
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = canvas.offsetWidth;
+      let H = canvas.height = canvas.offsetHeight;
+      const pieces = [];
+      function rand(min,max){return Math.random()*(max-min)+min}
+      function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
+      window.addEventListener('resize', resize);
+      function Piece(){
+        this.x = rand(0,W);
+        this.y = rand(-H,-10);
+        this.w = rand(6,12);
+        this.h = rand(8,14);
+        this.vx = rand(-1,1);
+        this.vy = rand(2,6);
+        this.color = `hsl(${~~rand(0,360)},80%,60%)`;
+        this.rot = rand(0,360);
+        this.rod = rand(-0.1,0.1);
+      }
+      function spawn(n){
+        for(let i=0;i<n;i++) pieces.push(new Piece());
+      }
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for(let i=pieces.length-1;i>=0;i--){
+          const p=pieces[i];
+          p.x+=p.vx; p.y+=p.vy; p.rot+=p.rod;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle=p.color;
+          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+          ctx.restore();
+          if(p.y>H+20) pieces.splice(i,1);
         }
-
-        var width = canvas.width();
-        var height = canvas.height();        
-        canvas.attr("width", width);
-        canvas.attr("height", height);
-
-        var opts = {
-            seed: {
-                x: width / 2 - 20,
-                color: "rgb(190, 26, 37)",
-                scale: 2
-            },
-            branch: [
-                [535, 680, 570, 250, 500, 200, 30, 100, [
-                    [540, 500, 455, 417, 340, 400, 13, 100, [
-                        [450, 435, 434, 430, 394, 395, 2, 40]
-                    ]],
-                    [550, 445, 600, 356, 680, 345, 12, 100, [
-                        [578, 400, 648, 409, 661, 426, 3, 80]
-                    ]],
-                    [539, 281, 537, 248, 534, 217, 3, 40],
-                    [546, 397, 413, 247, 328, 244, 9, 80, [
-                        [427, 286, 383, 253, 371, 205, 2, 40],
-                        [498, 345, 435, 315, 395, 330, 4, 60]
-                    ]],
-                    [546, 357, 608, 252, 678, 221, 6, 100, [
-                        [590, 293, 646, 277, 648, 271, 2, 80]
-                    ]]
-                ]] 
-            ],
-            bloom: {
-                num: 700,
-                width: 1080,
-                height: 650,
-            },
-            footer: {
-                width: 1200,
-                height: 5,
-                speed: 10,
-            }
-        }
-
-        var tree = new Tree(canvas[0], width, height, opts);
-        var seed = tree.seed;
-        var foot = tree.footer;
-        var hold = 1;
-
-        canvas.click(function(e) {
-            playAudio();
-            var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            if (seed.hover(x, y)) {
-                hold = 0; 
-                canvas.unbind("click");
-                canvas.unbind("mousemove");
-                canvas.removeClass('hand');
-            }
-        }).mousemove(function(e) {
-            var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
-            canvas.toggleClass('hand', seed.hover(x, y));
-        });
-
-        var seedAnimate = eval(Jscex.compile("async", function () {
-            seed.draw();
-            while (hold) {
-                $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canScale()) {
-                seed.scale(0.95);
-                $await(Jscex.Async.sleep(10));
-            }
-            while (seed.canMove()) {
-                seed.move(0, 2);
-                foot.draw();
-                $await(Jscex.Async.sleep(10));
-            }
-        }));
-
-        var growAnimate = eval(Jscex.compile("async", function () {
-            do {
-                tree.grow();
-                $await(Jscex.Async.sleep(10));
-            } while (tree.canGrow());
-        }));
-
-        var flowAnimate = eval(Jscex.compile("async", function () {
-            do {
-                tree.flower(2);
-                $await(Jscex.Async.sleep(10));
-            } while (tree.canFlower());
-        }));
-
-        var moveAnimate = eval(Jscex.compile("async", function () {
-            tree.snapshot("p1", 240, 0, 610, 680);
-            while (tree.move("p1", 500, 0)) {
-                foot.draw();
-                $await(Jscex.Async.sleep(10));
-            }
-            foot.draw();
-            tree.snapshot("p2", 500, 0, 610, 680);
-
-            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
-            canvas.css("background", "#ffe");
-            $await(Jscex.Async.sleep(300));
-            canvas.css("background", "none");
-        }));
-
-        var textAnimate = eval(Jscex.compile("async", function () {
-            $("#code").show().typewriter();
-        }));
-	    
-        var runAsync = eval(Jscex.compile("async", function () {
-            $await(seedAnimate());
-            $await(growAnimate());
-            $await(flowAnimate());
-            $await(moveAnimate());
-            textAnimate().start();
-        }));
-
-        runAsync().start();
+        requestAnimationFrame(update);
+      }
+      update();
+      // expose simple trigger
+      window.launchConfetti = function(){
+        spawn(80);
+      };
     })();
-    </script>
+
+    // confetti button
+    document.getElementById('confettiBtn').addEventListener('click', ()=>{
+      window.launchConfetti();
+    });
+
+    // Try auto-play once if allowed
+    window.addEventListener('load', ()=>{
+      audio.play().then(()=>{ playBtn.textContent="Playing 🎵"; }).catch(()=>{/*blocked*/});
+    });
+  </script>
 </body>
 </html>
